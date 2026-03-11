@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 public enum States
 {
@@ -9,12 +8,17 @@ public enum States
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+
+    [SerializeField] private States state = States.CanMove;
+
     public BoxCollider2D collider;
     public GameObject token1, token2;
     public int Size = 3;
     public int[,] Matrix;
-    [SerializeField] private States state = States.CanMove;
     public Camera camera;
+
+    private MouseInput _mouse;
+
     void Start()
     {
         Instance = this;
@@ -27,15 +31,20 @@ public class GameManager : MonoBehaviour
                 Matrix[i, j] = 0; // 0: desocupat, 1: fitxa jugador 1, -1: fitxa IA;
             }
         }
+
+        _mouse = GetComponent<MouseInput>();
     }
     private void Update()
     {
         if (state == States.CanMove)
         {
-            Vector3 m = Input.mousePosition;
+            //Vector3 m = Input.mousePosition;
+            Vector3 m = _mouse.Position;
             m.z = 10f;
+            Debug.Log("m -> " + m);
             Vector3 mousepos = camera.ScreenToWorldPoint(m);
-            if (Input.GetMouseButtonDown(0))
+            Debug.Log("mouse ->" + mousepos);
+            if (/*Input.GetMouseButtonDown(0)*/_mouse.Click)
             {
                 if (Calculs.CheckIfValidClick((Vector2)mousepos, Matrix))
                 {

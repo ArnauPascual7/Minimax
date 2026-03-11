@@ -393,6 +393,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1982848774}
   - component: {fileID: 1982848773}
+  - component: {fileID: 1982848775}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -412,11 +413,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6d578cca5d1c1e438b437fed5c03698, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: 0
   collider: {fileID: 2065243349}
   token1: {fileID: 461854740752270739, guid: 51082beb09a20424bb51a730531cad40, type: 3}
   token2: {fileID: 5731211871279232111, guid: f1fe34f9df1cae640ade9eca07b548dc, type: 3}
   Size: 3
-  state: 0
   camera: {fileID: 963194227}
 --- !u!4 &1982848774
 Transform:
@@ -433,6 +434,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1982848775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982848772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d2b194a196824b94164a6aad8e7ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MouseInput
 --- !u!1 &2065243348
 GameObject:
   m_ObjectHideFlags: 0
