@@ -413,7 +413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6d578cca5d1c1e438b437fed5c03698, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
+  state: 1
   collider: {fileID: 2065243349}
   token1: {fileID: 461854740752270739, guid: 51082beb09a20424bb51a730531cad40, type: 3}
   token2: {fileID: 5731211871279232111, guid: f1fe34f9df1cae640ade9eca07b548dc, type: 3}
