@@ -2,6 +2,12 @@
 
 ## Sense Poda
 
+Si ja hi ha un guanyador retorna la puntuació, i si no hi ha més moviments retorna 0. La profunditat penalitza/premia per preferir **guanyar ràpid** i **perdre tard**.
+
+Si isMax és verdader és maximitza el resultat, per cada casella buida al taulell, crida recursivament a Minimax() fins trobar el millor valor.
+
+Si isMax és fals és minimitza el resultat, per cada casella buida al taulell, crida recursivament a Minimax() fins trobar el millor valor.
+
 ```
 private int Minimax(int depth, bool isMax)
 {
@@ -59,6 +65,10 @@ private int Minimax(int depth, bool isMax)
 ```
 
 ## Amb poda
+
+Si ja hi ha un guanyador retorna la puntuació, i si no hi ha més moviments retorna 0. La profunditat penalitza/premia per preferir **guanyar ràpid** i **perdre tard**.
+
+Amb poda es comporta exactament igual que sense, pero utilitza els valors de alpha i beta per a filtrar resultats que no calen comprovar. Alpha representa el millor valor màxim, mentre que beta el millor valor mínim. La poda es produeix quan beta <= alpha, és a dir, quan el minimitzador ja té garantit un valor igual o pitjor que el que el maximitzador ja pot aconseguir per una altra branca. En aquest cas, continuar explorant no canviarà la decisió final, de manera que la branca s'abandona. Quan maximitzem si el valor trobat V >= beta, el minimitzador mai escollirà aquest camí, podem podar i quan minimitzem si el valor trobat V <= alpha, el maximitzador mai escollirà aquest camí, també podem podar. Cal tenir en compte també que alpha i beta es passen per valor a cada crida recursiva, de manera que s'actualitzen localment a cada nivell i la informació de poda es propaga cap avall però no afecta les branques ja explorades.
 
 ```
     private int Minimax(int depth, bool isMax, int alpha, int beta)
@@ -132,5 +142,3 @@ private int Minimax(int depth, bool isMax)
     }
 
 ```
-
-La profunditat penalitza/premia per preferir **guanyar ràpid** i **perdre tard**.
