@@ -1,7 +1,5 @@
-using NUnit.Framework.Internal;
 using System.Collections;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 public enum States
 {
     CanMove = 1,
@@ -116,6 +114,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Evaluates the optimal score for the current game state using the Minimax algorithm.
+    /// </summary>
+    /// <remarks>This method to determine the optimal move in Tic-Tac-Toe. The
+    /// score returned reflects the outcome of the game assuming both players play optimally. The method assumes the
+    /// current board state is valid and that moves are represented by specific integer values.</remarks>
+    /// <param name="depth">The current depth in the game tree. Used to adjust the score based on how many moves have been made.</param>
+    /// <param name="isMax">Indicates whether the current move is for the maximizing player. Set to <see langword="true"/> for the
+    /// maximizing player; otherwise, <see langword="false"/> for the minimizing player.</param>
+    /// <returns>An integer representing the best achievable score from the current game state for the specified player. Positive
+    /// values favor the maximizing player; negative values favor the minimizing player.</returns>
     private int Minimax(int depth, bool isMax)
     {
         int result = Calculs.EvaluateWin(Matrix);
@@ -170,6 +179,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Evaluates the optimal score for the current game state using the Minimax algorithm with alpha-beta pruning.
+    /// </summary>
+    /// <remarks>This method implements the Minimax algorithm with alpha-beta pruning to efficiently determine
+    /// the best possible move for a player in Tic-Tac-Toe game. It recursively explores possible moves, updating alpha
+    /// and beta values to eliminate branches that cannot affect the final decision. The score returned reflects the
+    /// desirability of the game state for the maximizing or minimizing player, adjusted by the depth to prefer faster
+    /// wins or slower losses.</remarks>
+    /// <param name="depth">The current depth of the recursive search. Used to adjust the score based on how many moves have been made.</param>
+    /// <param name="isMax">Indicates whether the current move is for the maximizing player. Set to <see langword="true"/> for the
+    /// maximizing player; otherwise, <see langword="false"/> for the minimizing player.</param>
+    /// <param name="alpha">The best already explored option along the path to the maximizer. Used to prune branches that cannot improve the
+    /// outcome for the maximizing player.</param>
+    /// <param name="beta">The best already explored option along the path to the minimizer. Used to prune branches that cannot improve the
+    /// outcome for the minimizing player.</param>
+    /// <returns>An integer representing the evaluated score of the game state. Positive values favor the maximizing player,
+    /// negative values favor the minimizing player, and zero indicates a draw or neutral outcome.</returns>
     private int Minimax(int depth, bool isMax, int alpha, int beta)
     {
         int result = Calculs.EvaluateWin(Matrix);
@@ -240,6 +266,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Determines whether there are any available moves remaining on the game board.
+    /// </summary>
+    /// <remarks>Use this method to check if the game can continue or if the board is full and no further
+    /// moves are possible.</remarks>
+    /// <returns>Returns <see langword="true"/> if at least one cell on the board is empty and a move can be made; otherwise,
+    /// <see langword="false"/>.</returns>
     private bool IsMovesLeft()
     {
         for (int i = 0; i < Matrix.GetLength(0); i++)
@@ -252,6 +285,19 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Determines the optimal move for the specified team by evaluating all possible moves using the minimax algorithm,
+    /// optionally with alpha-beta pruning.
+    /// </summary>
+    /// <remarks>If alpha-beta pruning is enabled, the search may be significantly faster, especially in
+    /// larger game trees. The returned node's X and Y properties indicate the recommended move position for the
+    /// team.</remarks>
+    /// <param name="team">The team identifier for which to find the best move. Typically, 1 represents the maximizing player and other
+    /// values represent the minimizing player.</param>
+    /// <param name="pruning">A value indicating whether alpha-beta pruning should be used to optimize the minimax search. Set to <see
+    /// langword="true"/> to enable pruning; otherwise, <see langword="false"/>.</param>
+    /// <returns>A <see cref="Node"/> representing the best move found for the specified team. The node contains the coordinates
+    /// and evaluation of the optimal move.</returns>
     private Node FindBestMove(int team, bool pruning)
     {
         bool isMaximizing = team == 1;
