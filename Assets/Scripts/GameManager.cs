@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour
                 {
                     if (Matrix[i, j] == 0)
                     {
-                        Matrix[i, j] = 1;
+                        Matrix[i, j] = 1; // Simula el moviment
 
                         bestVal = Mathf.Max(bestVal, Minimax(depth + 1, !isMax));
 
@@ -166,7 +166,7 @@ public class GameManager : MonoBehaviour
                 {
                     if (Matrix[i, j] == 0)
                     {
-                        Matrix[i, j] = -1;
+                        Matrix[i, j] = -1; // Simula el moviment
 
                         bestVal = Mathf.Min(bestVal, Minimax(depth + 1, !isMax));
 
@@ -216,7 +216,7 @@ public class GameManager : MonoBehaviour
                 {
                     if (Matrix[i, j] == 0)
                     {
-                        Matrix[i, j] = 1;
+                        Matrix[i, j] = 1; // Simula el moviment
 
                         int val = Minimax(depth + 1, !isMax, alpha, beta);
                         bestVal = Mathf.Max(bestVal, val);
@@ -224,12 +224,12 @@ public class GameManager : MonoBehaviour
 
                         Matrix[i, j] = 0;
 
-                        if (beta <= alpha)
+                        if (beta <= alpha) // Poda
                             break;
                     }
                 }
 
-                if (beta <= alpha)
+                if (beta <= alpha) // Poda
                     break;
             }
 
@@ -245,7 +245,7 @@ public class GameManager : MonoBehaviour
                 {
                     if (Matrix[i, j] == 0)
                     {
-                        Matrix[i, j] = -1;
+                        Matrix[i, j] = -1; // Simula el moviment
 
                         int val = Minimax(depth + 1, !isMax, alpha, beta);
                         bestVal = Mathf.Min(bestVal, val);
@@ -253,12 +253,12 @@ public class GameManager : MonoBehaviour
 
                         Matrix[i, j] = 0;
 
-                        if (beta <= alpha)
+                        if (beta <= alpha) // Poda
                             break;
                     }
                 }
 
-                if (beta <= alpha)
+                if (beta <= alpha) // Poda
                     break;
             }
 
