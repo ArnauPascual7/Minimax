@@ -1,5 +1,7 @@
+using NUnit.Framework.Internal;
 using System.Collections;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 public enum States
 {
     CanMove = 1,
@@ -10,6 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [SerializeField] private States state = States.CanMove;
+    [SerializeField] private bool _usePruning = true;
 
     public BoxCollider2D collider;
     public GameObject token1, token2;
@@ -60,7 +63,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         //RandomAI();
-        Node bestNode = FindBestMove((int)state);
+        Node bestNode = FindBestMove((int)state, _usePruning);
 
         if (bestNode.X == -1 || bestNode.Y == -1)
         {
@@ -167,6 +170,76 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private int Minimax(int depth, bool isMax, int alpha, int beta)
+    {
+        int result = Calculs.EvaluateWin(Matrix);
+
+        if (result == 1) return 10 - depth;
+        if (result == -1) return -10 + depth;
+        if (result == 0) return 0;
+
+        if (!IsMovesLeft()) return 0;
+
+        if (isMax)
+        {
+            int bestVal = int.MinValue;
+
+            for (int i = 0; i < Matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < Matrix.GetLength(1); j++)
+                {
+                    if (Matrix[i, j] == 0)
+                    {
+                        Matrix[i, j] = 1;
+
+                        int val = Minimax(depth + 1, false, alpha, beta);
+                        bestVal = Mathf.Max(bestVal, val);
+                        alpha = Mathf.Max(alpha, bestVal);
+
+                        Matrix[i, j] = 0;
+
+                        if (beta <= alpha)
+                            break;
+                    }
+                }
+
+                if (beta <= alpha)
+                    break;
+            }
+
+            return bestVal;
+        }
+        else
+        {
+            int bestVal = int.MaxValue;
+
+            for (int i = 0; i < Matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < Matrix.GetLength(1); j++)
+                {
+                    if (Matrix[i, j] == 0)
+                    {
+                        Matrix[i, j] = -1;
+
+                        int val = Minimax(depth + 1, true, alpha, beta);
+                        bestVal = Mathf.Min(bestVal, val);
+                        beta = Mathf.Min(beta, bestVal);
+
+                        Matrix[i, j] = 0;
+
+                        if (beta <= alpha)
+                            break;
+                    }
+                }
+
+                if (beta <= alpha)
+                    break;
+            }
+
+            return bestVal;
+        }
+    }
+
     private bool IsMovesLeft()
     {
         for (int i = 0; i < Matrix.GetLength(0); i++)
@@ -179,7 +252,7 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    private Node FindBestMove(int team)
+    private Node FindBestMove(int team, bool pruning)
     {
         bool isMaximizing = team == 1;
         int bestVal = isMaximizing ? int.MinValue : int.MaxValue;
@@ -194,8 +267,16 @@ public class GameManager : MonoBehaviour
                 {
                     Matrix[i, j] = team;
 
-                    int moveVal = Minimax(1, !isMaximizing);
-
+                    int moveVal;
+                    if (!pruning)
+                    {
+                        moveVal = Minimax(1, !isMaximizing);
+                    }
+                    else
+                    {
+                        moveVal = Minimax(1, !isMaximizing, int.MinValue, int.MaxValue);
+                    }
+                    
                     Matrix[i, j] = 0;
 
                     if (isMaximizing ? moveVal > bestVal : moveVal < bestVal)
