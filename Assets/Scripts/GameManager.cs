@@ -218,7 +218,7 @@ public class GameManager : MonoBehaviour
                     {
                         Matrix[i, j] = 1;
 
-                        int val = Minimax(depth + 1, false, alpha, beta);
+                        int val = Minimax(depth + 1, !isMax, alpha, beta);
                         bestVal = Mathf.Max(bestVal, val);
                         alpha = Mathf.Max(alpha, bestVal);
 
@@ -247,7 +247,7 @@ public class GameManager : MonoBehaviour
                     {
                         Matrix[i, j] = -1;
 
-                        int val = Minimax(depth + 1, true, alpha, beta);
+                        int val = Minimax(depth + 1, !isMax, alpha, beta);
                         bestVal = Mathf.Min(bestVal, val);
                         beta = Mathf.Min(beta, bestVal);
 
